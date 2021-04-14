@@ -69,7 +69,7 @@ jobs:
         run: mix deps.get
 
       - name: Maybe install assets
-        if: steps.deps-cache.outputs.cache-hit != 'true'
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: (cd assets && yarn)
 
       - name: Maybe create plts
