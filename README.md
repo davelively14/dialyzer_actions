@@ -16,5 +16,5 @@ I will only ever fetch deps or rebuild the code if the lock files change.
 
 ## Learn more
 
-  * What github actions uses for Elixir: https://github.com/erlef/setup-beam
-  * Where it matches up Elixir to OTP version: https://github.com/erlef/setup-beam/blob/main/src/setup-beam.js#L118
+  * What github actions uses for Elixir: https://github.com/actions/setup-elixir
+  * Where it matches up Elixir to OTP version: https://github.com/actions/setup-elixir/blob/main/src/setup-elixir.js#L80
