@@ -1,0 +1,80 @@
+on: push
+
+jobs:
+  verify:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        otp: [24.0-rc2]
+        elixir: [1.11.4]
+        nodejs: [15.14.0]
+
+    services:
+      db:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: dialyzer_actions_test
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-elixir@v1
+        with:
+          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.elixir }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.nodejs }}
+
+      - uses: actions/cache@v1
+        id: deps-cache
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - uses: actions/cache@v1
+        id: build-cache
+        with:
+          path: _build
+          key: ${{ runner.os }}-build-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: Find yarn cahce locations
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - uses: actions/cache@v1
+        id: dialyzer-cache
+        with:
+          path: priv/plts
+          key: ${{ runner.os }}-dialyzer-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: Install deps
+        id: install-deps
+        run: |
+          mix deps.get
+          (cd assets && yarn)
+
+      - name: Create plts
+        if: steps.dialyzer-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p priv/plts
+          mix dialyzer --plt
+
+      - name: Run Dialyzer
+        run: mix dialyzer --no-check --halt-exit-status
+
+      - run: mix format --check-formatted
+      - run: mix test

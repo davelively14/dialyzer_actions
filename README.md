@@ -1,20 +1,8 @@
 # DialyzerActions
 
-To start your Phoenix server:
-
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `npm install` inside the `assets` directory
-  * Start Phoenix endpoint with `mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+Just a demo to show how to setup dialyzer checks with cache via Github Actions.
 
 ## Learn more
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+  * What github actions uses for Elixir: https://github.com/erlef/setup-beam
+  * Where it matches up Elixir to OTP version: https://github.com/erlef/setup-beam/blob/main/src/setup-beam.js#L118
