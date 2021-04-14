@@ -55,7 +55,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache-location.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '**/yarn.lock')) }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/assets/yarn.lock')) }}
 
       - name: Cache dialyzer
         uses: actions/cache@v1
