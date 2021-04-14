@@ -65,11 +65,13 @@ jobs:
           path: priv/plts
           key: ${{ runner.os }}-dialyzer-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
-      - name: Install all deps
-        id: install-deps
-        run: |
-          mix deps.get
-          (cd assets && yarn)
+      - name: Install Elixir deps
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: mix deps.get
+
+      - name: Install assets
+        id: install-assets
+        run: (cd assets && yarn)
 
       - name: Create plts
         if: steps.dialyzer-cache.outputs.cache-hit != 'true'
