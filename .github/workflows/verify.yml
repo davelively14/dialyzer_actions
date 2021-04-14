@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: ${{ matrix.nodejs }}
 
-      - name: Cache deps
+      - name: Cache elixir deps
         uses: actions/cache@v1
         id: deps-cache
         with:
@@ -50,7 +50,7 @@ jobs:
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - name: Cache yarn
+      - name: Cache yarn deps
         uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
@@ -65,7 +65,7 @@ jobs:
           path: priv/plts
           key: ${{ runner.os }}-dialyzer-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
-      - name: Install deps
+      - name: Install all deps
         id: install-deps
         run: |
           mix deps.get
