@@ -1,6 +1,8 @@
 # DialyzerActions
 
-Just a demo to show how to setup dialyzer checks with cache via GitHub Actions.
+Just a demo to show how to setup dialyzer checks with cache via GitHub Actions. 
+
+Just adding a line here to show what happens when nothing changes that would invalidate the cache.
 
 ## Learn more
 
